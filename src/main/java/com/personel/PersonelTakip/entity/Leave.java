@@ -28,7 +28,7 @@ public class Leave extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
-
+private String description;
     public int getLeaveDays() {
         if (leaveStartDate != null && leaveEndDate != null && leaveType.equals(LeaveType.YILLIK)) {
             return (int) ChronoUnit.DAYS.between(leaveStartDate, leaveEndDate.plusDays(1));

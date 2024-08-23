@@ -31,9 +31,12 @@ public class Employee extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Duty duty;
     @NotNull
-
+    @Enumerated(EnumType.STRING)
+    private Status status;
+    @NotNull
     private LocalDate startDate;
     private LocalDate endDate;
+    private String description;
 
     // Yıllık izin hakları
     private Long leaveDays; // Hak edilen izin günleri
@@ -82,4 +85,11 @@ public class Employee extends BaseEntity {
                 .mapToLong(Leave::getLeaveDays)
                 .sum();
     }
+
+   /* @PrePersist
+    public void setDefaultStatus() {
+        if (this.status == null) {
+            this.status = Status.CALISIYOR;
+        }
+    }*/
 }
