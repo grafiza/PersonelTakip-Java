@@ -2,8 +2,6 @@ package com.personel.PersonelTakip.service;
 import com.personel.PersonelTakip.entity.Employee;
 import com.personel.PersonelTakip.entity.Leave;
 import com.personel.PersonelTakip.repository.EmployeeRepository;
-import com.personel.PersonelTakip.entity.Employee;
-import com.personel.PersonelTakip.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

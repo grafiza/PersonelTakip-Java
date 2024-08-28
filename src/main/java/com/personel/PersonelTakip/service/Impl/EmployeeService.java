@@ -7,6 +7,8 @@ import com.personel.PersonelTakip.entity.Leave;
 import com.personel.PersonelTakip.repository.EmployeeRepository;
 import com.personel.PersonelTakip.repository.LeaveRepository;
 import com.personel.PersonelTakip.service.IEmployeeService;
+import com.personel.PersonelTakip.entity.Duty;
+import com.personel.PersonelTakip.entity.Employee;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,7 @@ import java.util.List;
 @Service
 public class EmployeeService implements IEmployeeService {
     private final EmployeeRepository employeeRepository;
-    private final LeaveRepository leaveRepository ;
+    private final LeaveRepository leaveRepository;
 
     public EmployeeService(EmployeeRepository employeeRepository, LeaveRepository leaveRepository, LeaveRepository le, LeaveRepository leaveRepository1) {
         this.employeeRepository = employeeRepository;
@@ -33,8 +35,8 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public Employee save(Employee employee) {
         if (employee.getId() == null) {
-            if (employee.getSsnNumber() == null || employee.getSsnNumber().length()!=11) {
-throw new GeneralException("Geçersiz Kimlik Numarası");
+            if (employee.getSsnNumber() == null || employee.getSsnNumber().length() != 11) {
+                throw new GeneralException("Geçersiz Kimlik Numarası");
             }
             if (employeeRepository.existsBySsnNumber(employee.getSsnNumber())) {
                 throw new GeneralException("Bu Tc Kimlik Numarası Zaten Kayıtlı!");
@@ -46,7 +48,7 @@ throw new GeneralException("Geçersiz Kimlik Numarası");
 
     @Override
     public Employee getById(Long id) {
-        return employeeRepository.findById(id).orElseThrow(()->new GeneralException("Böyle bir kullanıcı bulunamadı!"));
+        return employeeRepository.findById(id).orElseThrow(() -> new GeneralException("Böyle bir kullanıcı bulunamadı!"));
 
     }
 
@@ -58,6 +60,25 @@ throw new GeneralException("Geçersiz Kimlik Numarası");
     @Override
     public Page<Employee> getAll(Pageable pageable) {
         return employeeRepository.findAll(pageable);
+    }
+
+    @Override
+    public Employee update(Employee employee) {
+        // Mevcut çalışanı bul
+        Employee foundEmployee = getById(employee.getId());
+
+        // Çalışanın kimlik numarasının geçerli olup olmadığını kontrol et
+        if (employee.getSsnNumber() == null || employee.getSsnNumber().length() != 11) {
+            throw new GeneralException("Geçersiz Kimlik Numarası");
+        }
+
+        // Eğer kimlik numarası değişmemişse ve başka bir çalışan tarafından kullanılmıyorsa işlemi devam ettir
+        if (!foundEmployee.getSsnNumber().equals(employee.getSsnNumber()) && employeeRepository.existsBySsnNumber(employee.getSsnNumber())) {
+            throw new GeneralException("Bu TC Kimlik Numarası Zaten Kayıtlı!");
+        }
+
+        // Güncellenmiş çalışan bilgilerini kaydet
+        return employeeRepository.save(employee);
     }
 
     @Override
@@ -76,4 +97,6 @@ throw new GeneralException("Geçersiz Kimlik Numarası");
             throw new GeneralException("Employee Kaydı Bulunamadı");
         }
     }
+
+
 }

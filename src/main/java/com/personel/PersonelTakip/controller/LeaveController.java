@@ -1,5 +1,6 @@
 package com.personel.PersonelTakip.controller;
 
+import com.personel.PersonelTakip.entity.Employee;
 import com.personel.PersonelTakip.entity.Leave;
 import com.personel.PersonelTakip.service.Impl.LeaveService;
 import org.springframework.data.domain.Page;
@@ -19,7 +20,7 @@ public class LeaveController {
 
     @GetMapping
     ResponseEntity<Page<Leave>> getLeaves(@RequestParam(defaultValue = "0") Integer page,
-                                          @RequestParam(defaultValue = "10") Integer pageSize) {
+                                         @RequestParam(defaultValue = "10") Integer pageSize) {
         return ResponseEntity.ok(leaveService.getAll(PageRequest.of(page, pageSize, Sort.by("id"))));
     }
     @GetMapping("/{id}")
@@ -29,10 +30,16 @@ public class LeaveController {
 
 
     @PostMapping
-    public ResponseEntity<Leave> saveLeave(@RequestBody Leave leave){
+        public ResponseEntity<Leave> saveLeave(@RequestBody Leave leave){
         return ResponseEntity.ok(leaveService.save(leave));
 
     }
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<Leave> updateLeave(@PathVariable Long id, @RequestBody Leave leave) {
+        Leave updatedLeave = leaveService.update(id, leave);
+        return ResponseEntity.ok(updatedLeave);
+    }
+
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteById(@PathVariable Long id) {
         leaveService.delete(id);

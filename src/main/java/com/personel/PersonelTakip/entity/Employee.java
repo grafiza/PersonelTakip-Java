@@ -1,6 +1,7 @@
 package com.personel.PersonelTakip.entity;
 
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -85,11 +86,4 @@ public class Employee extends BaseEntity {
                 .mapToLong(Leave::getLeaveDays)
                 .sum();
     }
-
-   /* @PrePersist
-    public void setDefaultStatus() {
-        if (this.status == null) {
-            this.status = Status.CALISIYOR;
-        }
-    }*/
 }

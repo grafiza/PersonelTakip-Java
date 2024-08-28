@@ -10,6 +10,6 @@ public interface IService <T>{
     T getById(Long id);
     List<T> getAll();
     Page<T> getAll(Pageable pageable);
-
+T update(T t);
     void delete(Long id);
 }

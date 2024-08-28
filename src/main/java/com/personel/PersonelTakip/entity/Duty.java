@@ -6,6 +6,7 @@ public enum Duty {
     KASIYER("Kasiyer"),
     SATIS("Satış Sorumlusu"),
     MUHASEBE("Muhasebe"),
+    SEF("Şef")
 
 
     ;

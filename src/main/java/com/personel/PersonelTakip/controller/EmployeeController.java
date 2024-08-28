@@ -1,5 +1,8 @@
     package com.personel.PersonelTakip.controller;
 
+    import com.personel.PersonelTakip.entity.Employee;
+    import com.personel.PersonelTakip.entity.Duty;
+    import com.personel.PersonelTakip.service.Impl.EmployeeService;
     import com.personel.PersonelTakip.entity.Duty;
     import com.personel.PersonelTakip.entity.Employee;
     import com.personel.PersonelTakip.service.Impl.EmployeeService;
@@ -46,6 +49,9 @@
             employeeService.delete(id);
             return ResponseEntity.ok().build();
         }
-
+        @PutMapping("/edit/{id}")
+        ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee){
+            return ResponseEntity.ok(employeeService.update(employee));
+        }
 
     }
