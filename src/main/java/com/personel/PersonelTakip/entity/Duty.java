@@ -5,8 +5,14 @@ public enum Duty {
     BEKCI("Bekçi"),
     KASIYER("Kasiyer"),
     SATIS("Satış Sorumlusu"),
-    MUHASEBE("Muhasebe"),
-    SEF("Şef")
+    MUHASEBE("Muhasebe Personeli"),
+    SEF("Şef"),
+    DEPO("Depo Personeli"),
+    TEMIZLIK("Temizlik Personeli"),
+    ASCI("Aşçı"),
+    SATINALMA("Satınalma Sorumlusu"),
+    MUDUR("Müdür")
+
 
 
     ;

@@ -108,18 +108,22 @@ public class LeaveService implements ILeaveService {
         }
         Leave leave = leaveRepository.findById(id).orElseThrow();
         Employee employee = leave.getEmployee();
-        leaveRepository.deleteById(id);
+
+        // Leave entity'sini silmeden önce Employee'yi güncelle
         employee.calculateRemainingLeaveDays();
         employeeService.save(employee);
+
+        // Leave entity'sini sil
+        leaveRepository.deleteById(id);
     }
 
     // Yıllık izin hakkını hesaplar
-    public int calculateLeaveEntitlement(LocalDate startDate, LocalDate endDate, List<Leave> pastLeaves) {
+    public double calculateLeaveEntitlement(LocalDate startDate, LocalDate endDate, List<Leave> pastLeaves) {
         long yearsWorked = ChronoUnit.YEARS.between(startDate, endDate);
 
-        int totalLeaveDays = getLeaveDaysByYearsWorked(yearsWorked);
+        double totalLeaveDays = getLeaveDaysByYearsWorked(yearsWorked);
 
-        int usedLeaveLastTwoYears = calculateUsedLeaveInLastTwoYears(pastLeaves, endDate);
+        double usedLeaveLastTwoYears = calculateUsedLeaveInLastTwoYears(pastLeaves, endDate);
 
         return totalLeaveDays - usedLeaveLastTwoYears;
     }
@@ -136,11 +140,11 @@ public class LeaveService implements ILeaveService {
     }
 
     // Son iki yılda kullanılan izinleri hesaplar
-    private int calculateUsedLeaveInLastTwoYears(List<Leave> pastLeaves, LocalDate endDate) {
+    private double calculateUsedLeaveInLastTwoYears(List<Leave> pastLeaves, LocalDate endDate) {
         LocalDate twoYearsAgo = endDate.minusYears(2);
         return pastLeaves.stream()
                 .filter(leave -> leave.getLeaveEndDate().isAfter(twoYearsAgo))
-                .mapToInt(Leave::getLeaveDays)
+                .mapToDouble(Leave::getLeaveDays)
                 .sum();
     }
 }

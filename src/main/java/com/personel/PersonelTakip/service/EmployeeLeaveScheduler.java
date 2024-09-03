@@ -52,13 +52,13 @@ public class EmployeeLeaveScheduler {
         return 52L;  // 17 yıl ve üstü
     }
 
-    private Long calculateUsedLeave(Employee employee) {
+    private double calculateUsedLeave(Employee employee) {
 
 
         LocalDate twoYearsAgo = LocalDate.now().minusYears(2);
         return employee.getLeaves().stream()
                 .filter(leave -> leave.getLeaveEndDate().isAfter(twoYearsAgo))
-                .mapToLong(Leave::getLeaveDays)
+                .mapToDouble(Leave::getLeaveDays)
                 .sum();
 
     }

@@ -7,11 +7,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class CalculateUsedLeave {
-    private Long calculateUsedLeave(List<Leave> leaveList) {
+    private double calculateUsedLeave(List<Leave> leaveList) {
         LocalDate twoYearsAgo = LocalDate.now().minusYears(2);
         return leaveList.stream()
                 .filter(leave -> leave.getLeaveEndDate().isAfter(twoYearsAgo))
-                .mapToLong(Leave::getLeaveDays)
+                .mapToDouble(Leave::getLeaveDays)
                 .sum();
     }
 }

@@ -40,8 +40,8 @@ public class Employee extends BaseEntity {
     private String description;
 
     // Yıllık izin hakları
-    private Long leaveDays; // Hak edilen izin günleri
-    private Long remainingLeaveDays; // Kullanılabilir kalan izin günleri
+    private double leaveDays; // Hak edilen izin günleri
+    private double remainingLeaveDays; // Kullanılabilir kalan izin günleri
 
     // İzin geçmişi, son iki yılın izni burada tutulacak
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -65,25 +65,25 @@ public class Employee extends BaseEntity {
         this.remainingLeaveDays = this.leaveDays - calculateUsedLeave(); // Kullanılan izinler düşülür
     }
 
-    private Long calculateLeaveDays(long yearsWorked) {
-        if (yearsWorked == 0) return 0L;
-        if (yearsWorked == 1) return 14L;
-        if (yearsWorked >= 2 && yearsWorked <= 5) return 28L;
-        if (yearsWorked == 6) return 34L;
-        if (yearsWorked >= 7 && yearsWorked <= 15) return 40L;
-        if (yearsWorked == 16) return 46L;
-        return 52L;  // 17 yıl ve üstü
+    private double calculateLeaveDays(double yearsWorked) {
+        if (yearsWorked == 0) return 0;
+        if (yearsWorked == 1) return 14;
+        if (yearsWorked >= 2 && yearsWorked <= 5) return 28;
+        if (yearsWorked == 6) return 34;
+        if (yearsWorked >= 7 && yearsWorked <= 15) return 40;
+        if (yearsWorked == 16) return 46;
+        return 52;  // 17 yıl ve üstü
     }
 
-    private Long calculateUsedLeave() {
+    private double calculateUsedLeave() {
         if (leaves == null || leaves.isEmpty()) {
-            return 0L;
+            return 0;
         }
 
         LocalDate twoYearsAgo = LocalDate.now().minusYears(2);
         return leaves.stream()
                 .filter(leave -> leave.getLeaveEndDate().isAfter(twoYearsAgo))
-                .mapToLong(Leave::getLeaveDays)
+                .mapToDouble(Leave::getLeaveDays)
                 .sum();
     }
 }

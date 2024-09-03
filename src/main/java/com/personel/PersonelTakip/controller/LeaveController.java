@@ -20,7 +20,7 @@ public class LeaveController {
 
     @GetMapping
     ResponseEntity<Page<Leave>> getLeaves(@RequestParam(defaultValue = "0") Integer page,
-                                         @RequestParam(defaultValue = "10") Integer pageSize) {
+                                          @RequestParam(defaultValue = "50") Integer pageSize) {
         return ResponseEntity.ok(leaveService.getAll(PageRequest.of(page, pageSize, Sort.by("id"))));
     }
     @GetMapping("/{id}")
@@ -30,7 +30,7 @@ public class LeaveController {
 
 
     @PostMapping
-        public ResponseEntity<Leave> saveLeave(@RequestBody Leave leave){
+    public ResponseEntity<Leave> saveLeave(@RequestBody Leave leave){
         return ResponseEntity.ok(leaveService.save(leave));
 
     }
