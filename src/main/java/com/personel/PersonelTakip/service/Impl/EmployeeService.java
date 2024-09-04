@@ -1,9 +1,7 @@
 package com.personel.PersonelTakip.service.Impl;
 
 import com.personel.PersonelTakip.common.GeneralException;
-import com.personel.PersonelTakip.entity.Employee;
-import com.personel.PersonelTakip.entity.Duty;
-import com.personel.PersonelTakip.entity.Leave;
+import com.personel.PersonelTakip.entity.*;
 import com.personel.PersonelTakip.repository.EmployeeRepository;
 import com.personel.PersonelTakip.repository.LeaveRepository;
 import com.personel.PersonelTakip.service.IEmployeeService;
@@ -30,6 +28,13 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public List<Employee> getUserByDuty(Duty duty) {
         return employeeRepository.findAllByDuty(duty);
+    }
+
+    @Override
+    public List<Employee> getAllActive() {
+
+            return employeeRepository.findByStatus(Status.CALISIYOR);
+
     }
 
     @Override

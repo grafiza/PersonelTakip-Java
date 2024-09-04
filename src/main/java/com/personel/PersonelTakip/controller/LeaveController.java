@@ -9,6 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/leave")
 public class LeaveController {
@@ -23,9 +25,20 @@ public class LeaveController {
                                           @RequestParam(defaultValue = "50") Integer pageSize) {
         return ResponseEntity.ok(leaveService.getAll(PageRequest.of(page, pageSize, Sort.by("id"))));
     }
+
+    @GetMapping("/getAllLeaves")
+    ResponseEntity<List<Leave>> getAllLeaves(){
+        return ResponseEntity.ok(leaveService.getAll());
+    }
+
     @GetMapping("/{id}")
     ResponseEntity<Leave> getLeaveById(@PathVariable Long id) {
         return ResponseEntity.ok(leaveService.getById(id));
+    }
+
+    @GetMapping("/employee/{id}")
+    ResponseEntity<List<Leave>> getLeaveByEmployee(@PathVariable Long id) {
+        return ResponseEntity.ok(leaveService.getAllLeaveByEmployee(id));
     }
 
 

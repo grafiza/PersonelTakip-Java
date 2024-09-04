@@ -54,4 +54,8 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.update(employee));
     }
 
+    @GetMapping("/active")
+    List<Employee> getAllActive(){
+        return employeeService.getAllActive();
+    }
 }

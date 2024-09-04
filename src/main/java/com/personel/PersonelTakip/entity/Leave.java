@@ -23,24 +23,14 @@ public class Leave extends BaseEntity {
     @NotNull
     private LeaveType leaveType;
 
-    @Override
-    public String toString() {
-        return "Leave{" +
-                "leaveType=" + leaveType +
-                ", leaveStartDate=" + leaveStartDate +
-                ", description='" + description + '\'' +
-                ", leaveEndDate=" + leaveEndDate +
-                ", employee=" + employee +
-                '}';
-    }
-
     @NotNull
     private LocalDate leaveStartDate;
     @NotNull
 
+    private LocalDate leaveEndDate;
+
     private String description;
 
-    private LocalDate leaveEndDate;
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
@@ -68,5 +58,18 @@ public class Leave extends BaseEntity {
         }
         return 0;
     }
-
+    public double setLeaveDaysZero()
+    {
+        return 0;
+    }
+    @Override
+    public String toString() {
+        return "Leave{" +
+                "leaveType=" + leaveType +
+                ", leaveStartDate=" + leaveStartDate +
+                ", description='" + description + '\'' +
+                ", leaveEndDate=" + leaveEndDate +
+                ", employee=" + employee +
+                '}';
+    }
 }

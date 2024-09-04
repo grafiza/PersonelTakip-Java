@@ -40,7 +40,7 @@ public class LeaveService implements ILeaveService {
 
         Leave savedLeave = leaveRepository.save(leave);
         employee.calculateRemainingLeaveDays();
-        employeeService.save(employee); // Güncellenmiş employee'yi kaydet
+        employeeService.update(employee); // Güncellenmiş employee'yi kaydet
 
         return savedLeave;
     }
@@ -53,6 +53,12 @@ public class LeaveService implements ILeaveService {
     @Override
     public List<Leave> getAll() {
         return leaveRepository.findAll();
+    }
+
+    public List<Leave> getAllLeaveByEmployee(Long id) {
+
+
+        return leaveRepository.findByEmployeeId(id);
     }
 
     @Override
@@ -100,33 +106,20 @@ public class LeaveService implements ILeaveService {
     }
 
 
-    @Transactional
     @Override
     public void delete(Long id) {
-        if (!leaveRepository.existsById(id)) {
-            throw new GeneralException("Izin Kaydı Bulunamadı");
+        Leave leave = leaveRepository.findById(id)
+                .orElseThrow(() -> new GeneralException("Leave not found with id: " + id));
+        Long employeeId = leave.getEmployee().getId();
+        leaveRepository.delete(leave);
+
+        Employee employee = employeeService.getById(employeeId);
+        if (employee != null) {
+            employee.calculateRemainingLeaveDays();
+            employeeService.save(employee);
         }
-        Leave leave = leaveRepository.findById(id).orElseThrow();
-        Employee employee = leave.getEmployee();
-
-        // Leave entity'sini silmeden önce Employee'yi güncelle
-        employee.calculateRemainingLeaveDays();
-        employeeService.save(employee);
-
-        // Leave entity'sini sil
-        leaveRepository.deleteById(id);
     }
 
-    // Yıllık izin hakkını hesaplar
-    public double calculateLeaveEntitlement(LocalDate startDate, LocalDate endDate, List<Leave> pastLeaves) {
-        long yearsWorked = ChronoUnit.YEARS.between(startDate, endDate);
-
-        double totalLeaveDays = getLeaveDaysByYearsWorked(yearsWorked);
-
-        double usedLeaveLastTwoYears = calculateUsedLeaveInLastTwoYears(pastLeaves, endDate);
-
-        return totalLeaveDays - usedLeaveLastTwoYears;
-    }
 
     // Çalışılan yıla göre izin günlerini döndürür
     private int getLeaveDaysByYearsWorked(long yearsWorked) {
@@ -139,12 +132,5 @@ public class LeaveService implements ILeaveService {
         return 52;  // 17 yıl ve üstü
     }
 
-    // Son iki yılda kullanılan izinleri hesaplar
-    private double calculateUsedLeaveInLastTwoYears(List<Leave> pastLeaves, LocalDate endDate) {
-        LocalDate twoYearsAgo = endDate.minusYears(2);
-        return pastLeaves.stream()
-                .filter(leave -> leave.getLeaveEndDate().isAfter(twoYearsAgo))
-                .mapToDouble(Leave::getLeaveDays)
-                .sum();
-    }
+
 }

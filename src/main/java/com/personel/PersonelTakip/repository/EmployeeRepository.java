@@ -1,7 +1,6 @@
 package com.personel.PersonelTakip.repository;
 
-import com.personel.PersonelTakip.entity.Employee;
-import com.personel.PersonelTakip.entity.Duty;
+import com.personel.PersonelTakip.entity.*;
 import com.personel.PersonelTakip.entity.Duty;
 import com.personel.PersonelTakip.entity.Employee;
 import org.springframework.data.domain.Page;
@@ -16,4 +15,5 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
     boolean existsBySsnNumber (String ssnNumber);
     List<Employee> findAllByDuty(Duty duty);
 
+   List< Employee> findByStatus(Status status);
 }
