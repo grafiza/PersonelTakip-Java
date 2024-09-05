@@ -1,7 +1,6 @@
 package com.personel.PersonelTakip.controller;
 
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,18 +18,15 @@ public class MainController {
     @GetMapping
     public ResponseEntity<String> getHolidays() {
         try {
-            // JSON dosyasını kaynak dizininden okur
-            ClassPathResource resource = new ClassPathResource("LeaveDays.json");
+            ClassPathResource resource = new ClassPathResource("data/LeaveDays.json");
             Path path = resource.getFile().toPath();
             String jsonContent = new String(Files.readAllBytes(path));
 
-            // JSON içeriğini döner
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(jsonContent);
 
         } catch (IOException e) {
-            // Hata durumunda 500 Internal Server Error döner
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error reading JSON file");
         }
