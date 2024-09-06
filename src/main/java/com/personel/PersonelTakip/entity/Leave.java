@@ -46,10 +46,7 @@ public class Leave extends BaseEntity {
         return calculator.calculateLeaveDays(this);
     }
 
-    public double setLeaveDaysZero()
-    {
-        return 0;
-    }
+
     @Override
     public String toString() {
         return "Leave{" +
