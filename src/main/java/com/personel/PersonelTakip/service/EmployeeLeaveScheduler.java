@@ -1,8 +1,9 @@
 package com.personel.PersonelTakip.service;
+
 import com.personel.PersonelTakip.entity.Employee;
 import com.personel.PersonelTakip.entity.Leave;
+import com.personel.PersonelTakip.payload.helper.LeaveDaysCalculator;
 import com.personel.PersonelTakip.repository.EmployeeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,6 @@ import java.util.List;
 
 @Service
 public class EmployeeLeaveScheduler {
-
 
     private final EmployeeRepository employeeRepository;
 
@@ -53,13 +53,14 @@ public class EmployeeLeaveScheduler {
     }
 
     private double calculateUsedLeave(Employee employee) {
-
-
         LocalDate twoYearsAgo = LocalDate.now().minusYears(2);
+
+        // LeaveDaysCalculator sınıfını kullanarak izin günlerini hesapla
+        LeaveDaysCalculator calculator = new LeaveDaysCalculator();
+
         return employee.getLeaves().stream()
                 .filter(leave -> leave.getLeaveEndDate().isAfter(twoYearsAgo))
-                .mapToDouble(Leave::getLeaveDays)
+                .mapToDouble(calculator::calculateLeaveDays) // Burada LeaveDaysCalculator kullanılıyor
                 .sum();
-
     }
 }

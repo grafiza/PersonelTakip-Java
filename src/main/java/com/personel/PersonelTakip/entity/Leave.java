@@ -1,7 +1,10 @@
 package com.personel.PersonelTakip.entity;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.personel.PersonelTakip.payload.helper.HolidayLoader;
+import com.personel.PersonelTakip.payload.helper.LeaveDaysCalculator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -9,6 +12,7 @@ import lombok.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -38,26 +42,10 @@ public class Leave extends BaseEntity {
 
 
     public double getLeaveDays() {
-        if (leaveStartDate != null && leaveEndDate != null && leaveType.equals(LeaveType.YILLIK)) {
-            double days = 0;
-
-
-            LocalDate date = leaveStartDate;
-            while (!date.isAfter(leaveEndDate)) {
-                if (date.getDayOfWeek() != DayOfWeek.SUNDAY) {
-                    days++;
-                }
-                date = date.plusDays(1);
-            }
-
-            // "YARIM GÜN" veya "yarım gün" ifadesini kontrol edin
-            if (description != null && (description.contains("YARIM GÜN") || description.contains("yarım gün"))) {
-                days -= 0.5; // Eğer varsa, 0,5 gün çıkar
-            }
-            return days;
-        }
-        return 0;
+        LeaveDaysCalculator calculator = new LeaveDaysCalculator();
+        return calculator.calculateLeaveDays(this);
     }
+
     public double setLeaveDaysZero()
     {
         return 0;
