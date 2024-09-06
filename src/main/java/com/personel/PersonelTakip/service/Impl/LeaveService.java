@@ -7,7 +7,9 @@ import com.personel.PersonelTakip.repository.EmployeeRepository;
 import com.personel.PersonelTakip.repository.LeaveRepository;
 import com.personel.PersonelTakip.service.ILeaveService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,8 +65,9 @@ public class LeaveService implements ILeaveService {
 
     @Override
     public Page<Leave> getAll(Pageable pageable) {
-        return leaveRepository.findAll(pageable);
+        Pageable sortedByEndDate = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("leaveEndDate").descending());
 
+        return leaveRepository.findAll(sortedByEndDate);
     }
 
     @Override

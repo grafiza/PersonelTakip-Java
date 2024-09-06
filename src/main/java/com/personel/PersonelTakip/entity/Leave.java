@@ -31,7 +31,7 @@ public class Leave extends BaseEntity {
     private LocalDate leaveStartDate;
     @NotNull
 
-    private LocalDate leaveEndDate;
+        private LocalDate leaveEndDate;
 
     private String description;
 
